@@ -7,7 +7,6 @@ export class UserGroupController {
 
   @Post('/AddUpdate')
   async addUpdate(@Body() payload: any) {
-    console.log(payload);
     if (payload.id === 0) {
       return this.userGroupService.createUserGroup(payload);
     } else {
@@ -17,7 +16,6 @@ export class UserGroupController {
 
   @Get()
   async getAll(@Query() query: any) {
-    const { PageNumber, PageSize, SortColumn, SortOrder, Search } = query;
     return this.userGroupService.getAllUserGroups(query);
   }
 }

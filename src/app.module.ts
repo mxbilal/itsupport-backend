@@ -9,6 +9,7 @@ import { RoleModule } from './role/role.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { UserGroupModule } from './user-group/user-group.module';
 import { IdGeneratorModule } from './id-generator/id-generator.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { IdGeneratorModule } from './id-generator/id-generator.module';
     RoleModule,
     UserGroupModule,
     IdGeneratorModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService, RoleService],

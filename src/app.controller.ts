@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('/LycaTool/GetDropdownItems')
+  async getToolsDropDown(): Promise<any> {
+    return this.appService.getToolsDropdownItems();
+  }
 }

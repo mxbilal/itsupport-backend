@@ -39,17 +39,8 @@ export class RoleController {
   }
 
   @Get('GetAllAsync')
-  async getAllRoles(@Query() query: any, @Req() req) {
-    const userProfile = req.userProfile; // Access user profile
-    const { PageNumber, PageSize, SortColumn, SortOrder, Search } = query;
-    return this.roleService.getAllRoles(
-      +PageNumber,
-      +PageSize,
-      SortColumn,
-      SortOrder,
-      Search,
-      userProfile,
-    );
+  async getAllRoles(@Query() query: any) {
+    return this.roleService.getAllRoles(query);
   }
   @Get('addTools')
   async addTools(@Query() query: any, @Req() req) {
