@@ -35,6 +35,6 @@ import { NewsModule } from './news/news.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*'); // Apply middleware to all routes
+    consumer.apply(AuthMiddleware).forRoutes('/a'); // Apply middleware to all routes
   }
 }

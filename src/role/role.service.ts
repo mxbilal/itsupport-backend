@@ -1,52 +1,77 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import axios from 'axios';
-import { DeleteResult, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { PaginationQueryParams } from 'src/custom-types';
+import { IdGeneratorService } from 'src/id-generator/id-generator.service';
 import { PaginationUtil } from 'src/utils/pagination.util';
 import { ResponseUtil } from 'src/utils/response.util';
 
 @Injectable()
 export class RoleService {
-  constructor(@InjectModel('Role') private roleModel: Model<any>) {}
+  constructor(
+    @InjectModel('Role') private roleModel: Model<any>,
+    private readonly idGeneratorService: IdGeneratorService,
+  ) {}
 
   async createRole(payload: any) {
-    const newRole = new this.roleModel(payload);
-    return newRole.save();
+    try {
+      const nextId = await this.idGeneratorService.getNextId('Role');
+      const newRole = new this.roleModel({ ...payload, id: nextId });
+      const result = await newRole.save();
+      return ResponseUtil.success('Role created successfully', result);
+    } catch (error) {
+      return ResponseUtil.error('Failed to create role', error.message);
+    }
   }
 
   async updateRole(payload: any) {
-    return this.roleModel.updateOne({ id: payload.id }, payload);
+    try {
+      const result = await this.roleModel.updateOne(
+        { id: payload.id },
+        payload,
+      );
+      if (result.modifiedCount > 0) {
+        return ResponseUtil.success('Role updated successfully', result);
+      }
+      return ResponseUtil.error('No role found to update');
+    } catch (error) {
+      return ResponseUtil.error('Failed to update role', error.message);
+    }
   }
 
-  async deleteRole(id: number): Promise<DeleteResult> {
-    return this.roleModel.deleteOne({ id });
+  async deleteRole(id: number) {
+    try {
+      const result = await this.roleModel.deleteOne({ id });
+      if (result.deletedCount > 0) {
+        return ResponseUtil.success('Role deleted successfully', result);
+      }
+      return ResponseUtil.error('No role found to delete');
+    } catch (error) {
+      return ResponseUtil.error('Failed to delete role', error.message);
+    }
   }
 
   async getAllRoles(queryParams: PaginationQueryParams) {
     const {
       PageNumber,
       pageSize,
-      SortColumn = 'id', // Default sort column
-      SortOrder = 'a', // Default sort order
+      SortColumn = 'id',
+      SortOrder = 'a',
       Search,
     } = queryParams;
+
     try {
-      // Validate SortColumn
-      const validColumns = ['id', 'name', 'createdAt', 'updatedAt']; // Define valid fields
+      const validColumns = ['id', 'name', 'createdAt', 'updatedAt'];
       const validSortColumn = validColumns.includes(SortColumn)
         ? SortColumn
         : 'id';
 
-      // Construct sorting object
       const sort: { [key: string]: 1 | -1 } = {
         [validSortColumn]: SortOrder === 'a' ? 1 : -1,
       };
 
-      // Construct query
       const query = Search ? { name: { $regex: Search, $options: 'i' } } : {};
 
-      // Fetch data
       const results = await this.roleModel
         .find(query)
         .sort(sort)
@@ -54,26 +79,27 @@ export class RoleService {
         .limit(+pageSize)
         .exec();
 
-      // Add serial numbers using the utility function
       const dataWithSrNo = PaginationUtil.addSerialNumbers(
         results.map((item) => ({
-          ...item.toObject(), // Convert to plain object
+          ...item.toObject(),
         })),
         +PageNumber,
         +pageSize,
       );
+      const totalRecords = await this.roleModel.countDocuments(query);
 
-      // Format and return success response
       return ResponseUtil.success(
-        'User groups retrieved successfully',
+        'Roles retrieved successfully',
         dataWithSrNo,
+        {
+          totalRecords,
+          pageNumber: +PageNumber,
+          pageSize: +pageSize,
+          totalPages: Math.ceil(totalRecords / +pageSize),
+        },
       );
     } catch (error) {
-      // Handle errors and return error response
-      return ResponseUtil.error(
-        'Failed to retrieve user groups',
-        error.message,
-      );
+      return ResponseUtil.error('Failed to retrieve roles', error.message);
     }
   }
 }

@@ -14,4 +14,9 @@ export class AppController {
   async getToolsDropDown(): Promise<any> {
     return this.appService.getToolsDropdownItems();
   }
+
+  @Get('/Country/GetDropdownItems')
+  async getCountryDropDown(): Promise<any> {
+    return this.appService.getCountryDropdownItems();
+  }
 }

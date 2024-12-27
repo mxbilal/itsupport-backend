@@ -30,4 +30,22 @@ export class AppService {
       await client.close();
     }
   }
+
+  async getCountryDropdownItems(): Promise<any> {
+    const client = new MongoClient(this.mongoUri);
+    try {
+      await client.connect();
+      console.log(this.dbName, this.mongoUri);
+      const db = client.db(this.dbName);
+      const collection = db.collection('country');
+      const items = await collection.find().toArray();
+
+      return ResponseUtil.success('Data Found successfully', items);
+    } catch (error) {
+      console.error('Error fetching dropdown items:', error);
+      return ResponseUtil.error('Something went wrong', error);
+    } finally {
+      await client.close();
+    }
+  }
 }

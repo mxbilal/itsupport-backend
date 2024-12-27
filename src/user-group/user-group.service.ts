@@ -89,11 +89,12 @@ export class UserGroupService {
         +PageNumber,
         +pageSize,
       );
+      const totalRecords = await this.UserGroupModel.countDocuments(query);
 
-      // Format and return success response
       return ResponseUtil.success(
         'User groups retrieved successfully',
         dataWithSrNo,
+        { extraData: totalRecords },
       );
     } catch (error) {
       // Handle errors and return error response

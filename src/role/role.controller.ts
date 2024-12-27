@@ -33,8 +33,7 @@ export class RoleController {
   }
 
   @Delete('DeleteAsyn')
-  async deleteRole(@Query('id') id: number, @Req() req): Promise<DeleteResult> {
-    const userProfile = req.userProfile; // Access user profile
+  async deleteRole(@Query('id') id: number): Promise<any> {
     return this.roleService.deleteRole(id);
   }
 
@@ -42,6 +41,11 @@ export class RoleController {
   async getAllRoles(@Query() query: any) {
     return this.roleService.getAllRoles(query);
   }
+  @Get('/GetAllRoleInDropdown')
+  async getAllRolesDropdown(@Query() query: any) {
+    return this.roleService.getAllRoles(query);
+  }
+
   @Get('addTools')
   async addTools(@Query() query: any, @Req() req) {
     let result = [];

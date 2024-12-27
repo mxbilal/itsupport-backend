@@ -18,4 +18,17 @@ export class UserGroupController {
   async getAll(@Query() query: any) {
     return this.userGroupService.getAllUserGroups(query);
   }
+  @Get('/GetAllUserGroup')
+  async getDropdown(@Query() query: any) {
+    const allGroups = await this.userGroupService.getAllUserGroups(query);
+    const dropdownData = allGroups.data.map((group) => ({
+      id: group.id,
+      name: group.name,
+    }));
+    return {
+      succeeded: true,
+      message: 'Dropdown data retrieved successfully',
+      data: dropdownData,
+    };
+  }
 }
