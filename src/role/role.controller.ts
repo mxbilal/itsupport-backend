@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 import axios from 'axios';
+import { DeleteResult } from 'mongoose';
 
 @Controller('Role')
 export class RoleController {
@@ -32,7 +33,7 @@ export class RoleController {
   }
 
   @Delete('DeleteAsyn')
-  async deleteRole(@Query('id') id: number, @Req() req) {
+  async deleteRole(@Query('id') id: number, @Req() req): Promise<DeleteResult> {
     const userProfile = req.userProfile; // Access user profile
     return this.roleService.deleteRole(id);
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
-import { Model } from 'mongoose';
+import { DeleteResult, Model } from 'mongoose';
 
 @Injectable()
 export class RoleService {
@@ -16,7 +16,7 @@ export class RoleService {
     return this.roleModel.updateOne({ id: payload.id }, payload);
   }
 
-  async deleteRole(id: number) {
+  async deleteRole(id: number): Promise<DeleteResult> {
     return this.roleModel.deleteOne({ id });
   }
 
