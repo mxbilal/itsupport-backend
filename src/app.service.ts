@@ -16,7 +16,6 @@ export class AppService {
 
     try {
       await client.connect();
-      console.log(this.dbName, this.mongoUri);
       const db = client.db(this.dbName);
       const collection = db.collection('lyca_tools');
       // Fetch all items for the dropdown
@@ -35,7 +34,6 @@ export class AppService {
     const client = new MongoClient(this.mongoUri);
     try {
       await client.connect();
-      console.log(this.dbName, this.mongoUri);
       const db = client.db(this.dbName);
       const collection = db.collection('country');
       const items = await collection.find().toArray();

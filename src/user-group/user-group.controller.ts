@@ -8,19 +8,19 @@ export class UserGroupController {
   @Post('/AddUpdate')
   async addUpdate(@Body() payload: any) {
     if (payload.id === 0) {
-      return this.userGroupService.createUserGroup(payload);
+      return this.userGroupService.create(payload);
     } else {
-      return this.userGroupService.updateUserGroup(payload);
+      return this.userGroupService.update(payload);
     }
   }
 
   @Get()
   async getAll(@Query() query: any) {
-    return this.userGroupService.getAllUserGroups(query);
+    return this.userGroupService.getAll(query);
   }
   @Get('/GetAllUserGroup')
   async getDropdown(@Query() query: any) {
-    const allGroups = await this.userGroupService.getAllUserGroups(query);
+    const allGroups = await this.userGroupService.getAll(query);
     const dropdownData = allGroups.data.map((group) => ({
       id: group.id,
       name: group.name,

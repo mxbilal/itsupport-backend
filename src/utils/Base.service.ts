@@ -7,8 +7,8 @@ import { ResponseUtil } from './response.util';
 export class BaseService<T> {
   constructor(
     private readonly model: Model<T>,
-    private readonly idGeneratorService: IdGeneratorService,
-    private readonly modelName: string, // Name for ID generation
+    protected readonly idGeneratorService?: IdGeneratorService,
+    protected readonly modelName?: string,
   ) {}
 
   async create(payload: any) {
@@ -65,17 +65,15 @@ export class BaseService<T> {
   }
 
   async getAll(queryParams: PaginationQueryParams) {
-    const {
-      PageNumber,
-      pageSize,
-      SortColumn = 'id',
-      SortOrder = 'a',
-      Search,
-    } = queryParams;
-
+    const { PageNumber, pageSize, SortColumn, SortOrder, Search } = queryParams;
     try {
+      const validColumns = ['id', 'name', 'createdAt', 'updatedAt'];
+      const validSortColumn = validColumns.includes(SortColumn)
+        ? SortColumn
+        : 'id';
+
       const sort: { [key: string]: 1 | -1 } = {
-        [SortColumn]: SortOrder === 'a' ? 1 : -1,
+        [validSortColumn]: SortOrder === 'a' ? 1 : -1,
       };
 
       const query = Search ? { name: { $regex: Search, $options: 'i' } } : {};

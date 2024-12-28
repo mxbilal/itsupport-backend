@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 import axios from 'axios';
-import { DeleteResult } from 'mongoose';
 
 @Controller('Role')
 export class RoleController {
@@ -20,12 +19,12 @@ export class RoleController {
   async createOrUpdateRole(@Body() payload: any, @Req() req) {
     const userProfile = req.userProfile; // Access user profile
     if (payload.id === 0) {
-      return this.roleService.createRole({
+      return this.roleService.create({
         ...payload,
         createdBy: userProfile.id,
       });
     } else {
-      return this.roleService.updateRole({
+      return this.roleService.update({
         ...payload,
         modifiedBy: userProfile.id,
       });
@@ -34,16 +33,16 @@ export class RoleController {
 
   @Delete('DeleteAsyn')
   async deleteRole(@Query('id') id: number): Promise<any> {
-    return this.roleService.deleteRole(id);
+    return this.roleService.delete(id);
   }
 
   @Get('GetAllAsync')
   async getAllRoles(@Query() query: any) {
-    return this.roleService.getAllRoles(query);
+    return this.roleService.getAll(query);
   }
   @Get('/GetAllRoleInDropdown')
   async getAllRolesDropdown(@Query() query: any) {
-    return this.roleService.getAllRoles(query);
+    return this.roleService.getAll(query);
   }
 
   @Get('addTools')
