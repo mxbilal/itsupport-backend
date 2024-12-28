@@ -13,5 +13,5 @@ export interface PaginationQueryParams {
   pageSize: string;
   SortColumn?: string;
   SortOrder?: 'a' | 'd';
-  Search?: string;
+  search?: string;
 }

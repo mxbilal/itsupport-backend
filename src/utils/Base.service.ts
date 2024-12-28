@@ -65,7 +65,7 @@ export class BaseService<T> {
   }
 
   async getAll(queryParams: PaginationQueryParams) {
-    const { PageNumber, pageSize, SortColumn, SortOrder, Search } = queryParams;
+    const { PageNumber, pageSize, SortColumn, SortOrder, search } = queryParams;
     try {
       const validColumns = ['id', 'name', 'createdAt', 'updatedAt'];
       const validSortColumn = validColumns.includes(SortColumn)
@@ -76,8 +76,14 @@ export class BaseService<T> {
         [validSortColumn]: SortOrder === 'a' ? 1 : -1,
       };
 
-      const query = Search ? { name: { $regex: Search, $options: 'i' } } : {};
-
+      const query = search
+        ? {
+            $or: [
+              { name: { $regex: search, $options: 'i' } },
+              { title: { $regex: search, $options: 'i' } },
+            ],
+          }
+        : {};
       const results = await this.model
         .find(query)
         .sort(sort)
