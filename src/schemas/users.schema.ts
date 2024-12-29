@@ -8,7 +8,7 @@ export const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
     initial: { type: String, required: true },
     roleId: { type: Number, required: true },
-    isActive: { type: Boolean, default: true },
+    active: { type: Boolean, default: true },
     phoneNumber: { type: String, required: true },
     password: { type: String, required: true },
     userGroupId: { type: Number, required: true },
