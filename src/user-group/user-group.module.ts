@@ -12,6 +12,5 @@ import { IdGeneratorModule } from 'src/id-generator/id-generator.module';
   ],
   controllers: [UserGroupController],
   providers: [UserGroupService],
-  exports: [MongooseModule],
 })
 export class UserGroupModule {}

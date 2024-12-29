@@ -89,6 +89,7 @@ export class BaseService<T> {
         .sort(sort)
         .skip((+PageNumber - 1) * +pageSize)
         .limit(+pageSize)
+        .select('-__v -_id')
         .exec();
 
       const dataWithSrNo = PaginationUtil.addSerialNumbers(

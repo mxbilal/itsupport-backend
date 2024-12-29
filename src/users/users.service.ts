@@ -90,12 +90,13 @@ export class UsersService extends BaseService<any> {
           const userObject = user.toObject();
           delete userObject.password;
 
+          const fullName =
+            (userObject?.firstName ?? '') + ' ' + (userObject?.lastName ?? '');
+
           return {
             ...userObject,
-            enFullName:
-              (userObject?.firstName ?? '') +
-              ' ' +
-              (userObject?.lastName ?? ''),
+            enFullName: fullName,
+            fullName,
             roleDTO: role ? role.toObject() : {},
             roles: role ? role.toObject()?.name || '' : '',
           };

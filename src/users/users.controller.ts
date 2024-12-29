@@ -50,7 +50,7 @@ export class UsersController {
     return this.userService.getAllUsers(query);
   }
 
-  @Get('/GetAllUsersDropdown')
+  @Get('/GetAllUser')
   async getAllUsersDropdown(@Query() query: any) {
     return this.userService.getAllUsers(query);
   }

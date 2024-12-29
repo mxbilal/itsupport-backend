@@ -16,6 +16,8 @@ import { UserGroupModule } from './user-group/user-group.module';
 import { IdGeneratorModule } from './id-generator/id-generator.module';
 import { NewsModule } from './news/news.module';
 import { getMongoConfig } from './config/db.config';
+import { AssetTypeModule } from './asset-type/asset-type.module';
+import { AssetModule } from './asset/asset.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { getMongoConfig } from './config/db.config';
     UserGroupModule,
     IdGeneratorModule,
     NewsModule,
+    AssetTypeModule,
+    AssetModule,
   ],
   controllers: [AppController],
   providers: [AppService, RoleService],
