@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleService } from './role/role.service';
 import { RoleModule } from './role/role.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
@@ -18,6 +19,9 @@ import { NewsModule } from './news/news.module';
 import { getMongoConfig } from './config/db.config';
 import { AssetTypeModule } from './asset-type/asset-type.module';
 import { AssetModule } from './asset/asset.module';
+import { QuessionaireModule } from './quessionaire/quessionaire.module';
+import { getMySQLConfig } from './config/mysql.config';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -27,6 +31,11 @@ import { AssetModule } from './asset/asset.module';
       useFactory: getMongoConfig,
       inject: [ConfigService],
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: getMySQLConfig,
+      inject: [ConfigService],
+    }),
     UsersModule,
     RoleModule,
     UserGroupModule,
@@ -34,6 +43,8 @@ import { AssetModule } from './asset/asset.module';
     NewsModule,
     AssetTypeModule,
     AssetModule,
+    QuessionaireModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService, RoleService],
